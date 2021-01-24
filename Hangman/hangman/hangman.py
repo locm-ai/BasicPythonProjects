@@ -8,8 +8,16 @@ Eventually will include the following aspects
     If the letter does occur in the word, the computer notifies the player. If there are letters left to guess, the computer invites the player to go on.
     When the entire word is uncovered, it's a victory! The game calculates the final score and returns to the main menu.
 
-Going to begin the initial build out by announcing to the user via console the current game status
+Adding the following functionality
+    Ask the player for a possible word.
+    Print You survived! if the user guesses the word.
+    Print You lost! if the user guesses incorrectly.
 '''
 
 print("H A N G M A N")
-print("The game will be available soon.")
+hidden_word = "python" #placeholder word
+guess = input("Guess the word: ") # Prompts user for a guess and stores as a string
+if guess == hidden_word:  # Checks if the users guess matches with the word and outputs a win/loss statement
+    print("You survived!")
+else:
+    print("You lost!")
