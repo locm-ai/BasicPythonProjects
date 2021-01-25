@@ -1,3 +1,4 @@
+import random
 '''
 Take on the popular game Hangman
 Eventually will include the following aspects
@@ -9,13 +10,14 @@ Eventually will include the following aspects
     When the entire word is uncovered, it's a victory! The game calculates the final score and returns to the main menu.
 
 Adding the following functionality
-    Ask the player for a possible word.
-    Print You survived! if the user guesses the word.
-    Print You lost! if the user guesses incorrectly.
+    Create the following list of words: 'python', 'java', 'kotlin', 'javascript'.
+    Program the game to choose a word from the list at random. You can enter more words, but let's stick to these four for now. 
+
 '''
 
 print("H A N G M A N")
-hidden_word = "python" #placeholder word
+hidden_words = ['python', 'java', 'kotlin', 'javascript']
+hidden_word = hidden_words[random.randint(0,len(hidden_words) - 1)] #picks a random word
 guess = input("Guess the word: ") # Prompts user for a guess and stores as a string
 if guess == hidden_word:  # Checks if the users guess matches with the word and outputs a win/loss statement
     print("You survived!")
