@@ -10,15 +10,15 @@ Eventually will include the following aspects
     When the entire word is uncovered, it's a victory! The game calculates the final score and returns to the main menu.
 
 Adding the following functionality
-    Create the following list of words: 'python', 'java', 'kotlin', 'javascript'.
-    Program the game to choose a word from the list at random. You can enter more words, but let's stick to these four for now. 
-
+    As in the previous section, you should use the following word list: 'python', 'java', 'kotlin', 'javascript'
+    Once the computer has chosen a word from the list, show its first 3 letters. Hidden letters should be replaced with hyphens ("-")
 '''
 
 print("H A N G M A N")
 hidden_words = ['python', 'java', 'kotlin', 'javascript']
 hidden_word = hidden_words[random.randint(0,len(hidden_words) - 1)] #picks a random word
-guess = input("Guess the word: ") # Prompts user for a guess and stores as a string
+word_display = hidden_word[0:3] + ("-" * (len(hidden_word) - 3)) #formats the word to provide a hint
+guess = input(f"Guess the word: {word_display}") # Prompts user for a guess(with hint provided) and stores as a string
 if guess == hidden_word:  # Checks if the users guess matches with the word and outputs a win/loss statement
     print("You survived!")
 else:
