@@ -1,3 +1,4 @@
+# Write your code here
 import random
 '''
 Take on the popular game Hangman
@@ -10,16 +11,32 @@ Eventually will include the following aspects
     When the entire word is uncovered, it's a victory! The game calculates the final score and returns to the main menu.
 
 Adding the following functionality
-    As in the previous section, you should use the following word list: 'python', 'java', 'kotlin', 'javascript'
-    Once the computer has chosen a word from the list, show its first 3 letters. Hidden letters should be replaced with hyphens ("-")
+    A player has exactly 8 tries and enters letters. Nothing changes if a player has more tries left but they have already guessed the word.
+    If the letter doesn't appear in the word, the computer takes one try away – even if the user has already guessed this letter.
+    If the player doesn't have any more attempts, the game should end and the program should show a losing message. Otherwise, the player can continue to input letters.
+    Also, the word should be selected from our list: 'python', 'java', 'kotlin', 'javascript', so that your program can be tested more reliably.
 '''
 
 print("H A N G M A N")
+print("\n\n")
 hidden_words = ['python', 'java', 'kotlin', 'javascript']
-hidden_word = hidden_words[random.randint(0,len(hidden_words) - 1)] #picks a random word
-word_display = hidden_word[0:3] + ("-" * (len(hidden_word) - 3)) #formats the word to provide a hint
-guess = input(f"Guess the word: {word_display}") # Prompts user for a guess(with hint provided) and stores as a string
-if guess == hidden_word:  # Checks if the users guess matches with the word and outputs a win/loss statement
-    print("You survived!")
-else:
-    print("You lost!")
+hidden_word = hidden_words[random.randint(0, len(hidden_words) - 1)]  # picks a random word
+word_display = ("-" * (len(hidden_word)))  # formats the word to provide a hint
+remaining_attempts = 8
+guessed_letters = []
+while remaining_attempts > 0:  # Looping structure until user is out of attempts
+    print(f"{word_display}")  # display the word, hidden by "-"
+    guess = input("Input a letter: ")  # Prompts user for a guess(with hint provided) and stores as a string
+    guessed_letters.append(guess)  # adds guess to list of guessed_letters
+    if guess not in hidden_word:  # checks if the users guess is a part of the hidden_word and outputs message if it is not
+        print("That letter doesn't appear in the word")
+    temp_display = hidden_word  # copy of hidden_word
+    for letters in hidden_word:  # parses through every character in hidden_word
+         if letters not in guessed_letters:  # boolean check if a character in hidden_word is a part of guessed_letters
+             temp_display = temp_display.replace(letters, "-")  #replaces every character that fulfils the above requirements with "-"
+    word_display = temp_display  # overwrite what is display at the start of the loop
+    remaining_attempts -= 1  # lowers remaining attempts
+    print("\n")  # new line for formatting
+
+print("Thanks for playing!")
+print("We'll see how well you did in the next stage")
