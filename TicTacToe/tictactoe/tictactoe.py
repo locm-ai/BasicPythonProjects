@@ -1,39 +1,25 @@
 """
-    It’s time to make our game interactive! Now we’re going to add the ability
-for a user to make a move. To do this, we need to divide the grid into cells.
-Suppose the top left cell has the coordinates (1, 1) and the bottom right cell
-has the coordinates (3, 3) like in this table:
-    (1, 1) (1, 2) (1, 3)
-    (2, 1) (2, 2) (2, 3)
-    (3, 1) (3, 2) (3, 3)
-    The program should ask the user to enter the coordinates of the cell where
-they want to make a move. In this stage, the user plays as X, not O. Keep in
-mind that the first coordinate goes from left to right and the second
-coordinate goes from top to bottom. Also note that coordinates start with 1
-and can be 1, 2, or 3. What happens if the user enters incorrect coordinates?
-The user could enter symbols instead of numbers, or enter coordinates
-representing occupied cells or cells that aren’t even on the grid. You need to
-check the user's input and catch possible exceptions.
+Our game is almost ready! Now let's combine what we’ve learned in the previous
+stages to make a game of tic-tac-toe that two players can play from the
+beginning (with an empty grid) through to the end (until there is a draw, or
+one of the players wins).
+The first player has to play as X and their opponent plays as O.
 
 
-Adding the following functionality:
-    Get the 3x3 grid from the input as in the previous stages.
-    Output this 3x3 grid as in the previous stages.
-    Prompt the user to make a move.
-    The user should input 2 numbers that represent the cell where they want to
-place their X. (the 9 symbols representing the field will be the first line of
-input, and the 2 coordinate numbers will be the second line of input)
-    Analyze user input and show messages in the following situations: This
-cell is occupied! Choose another one! if the cell is not empty. You should
-enter numbers! if the user enters non-numeric symbols in the coordinates
-input. Coordinates should be from 1 to 3! if the user enters coordinates
-outside the game grid.
-    Update the grid to include the user's move and print the updated grid to
-    the console.
+In this stage, we will write a program that:
+    Prints an empty grid at the beginning of the game.
+    Creates a game loop where the program asks the user to enter the cell
+coordinates, analyzes the move for correctness and shows a grid with the
+changes if everything is okay.
+    Ends the game when someone wins or there is a draw.
+    You need to output the final result at the end of the game.
 """
 
 
-def horizantal_win(one, two, three):
+def horizantal_win(grid):
+    one = grid[0:3]
+    two = grid[3:6]
+    three = grid[6:]
     counter = 0
     winning_letter = ''
     rows = [one, two, three]
@@ -48,7 +34,10 @@ def horizantal_win(one, two, three):
         return "Impossible"
 
 
-def vertical_win(one, two, three):
+def vertical_win(grid):
+    one = grid[0:3]
+    two = grid[3:6]
+    three = grid[6:]
     counter = 0
     winning_letter = ''
     for i in range(0, 3):
@@ -62,7 +51,10 @@ def vertical_win(one, two, three):
         return "Impossible"
 
 
-def diagonal_win(one, two, three):
+def diagonal_win(grid):
+    one = grid[0:3]
+    two = grid[3:6]
+    three = grid[6:]
     if two[1] == 'X' or two[1] == 'O':
         if one[0] == two[1] and one[0] == three[2]:
             return f"{two[1]} wins"
@@ -70,14 +62,18 @@ def diagonal_win(one, two, three):
             return f"{two[1]} wins"
 
 
-def draw(one, two, three):
+def draw(grid):
+    one = grid[0:3]
+    two = grid[3:6]
+    three = grid[6:]
     rows = [one, two, three]
     full = True
     for row in rows:
         if '_' in row or ' ' in row:
             full = False
-    if full == True:
+    if full:
         return "Draw"
+
 
 """
 def count_difference(one, two, three):
@@ -87,21 +83,17 @@ def count_difference(one, two, three):
         return "Impossible"
 """
 
-def game_state(one, two, three):  # Void function for checking win conditions
-    if horizantal_win(one, two, three) != None:
-        return (horizantal_win(one, two, three))
-    elif vertical_win(one, two, three) != None:
-        return (vertical_win(one, two, three))
-    elif diagonal_win(one, two, three) != None:
-        return (diagonal_win(one, two, three))
-    elif draw(one, two, three) != None:
-        return (draw(one, two, three))
-    """
-    elif count_difference(one, two, three) != None:
-        return (count_difference(one, two, three))
-    else:
-        return ("Game not finished")
-    """
+
+def game_state(grid):  # Void function for checking win conditions
+    if horizantal_win(grid) is not None:
+        return horizantal_win(grid)
+    elif vertical_win(grid) is not None:
+        return vertical_win(grid)
+    elif diagonal_win(grid) is not None:
+        return diagonal_win(grid)
+    elif draw(grid) is not None:
+        return draw(grid)
+
 
 def display_grid(grid):
     one = grid[0:3]
@@ -114,8 +106,12 @@ def display_grid(grid):
     print("---------")
 
 
-def play_game(user_input, resume = True):
+def play_game(user_input, resume, next_move='X'):
     if resume:
+        if any([user_input.count('X') == 0,user_input.count('X') <= user_input.count('O')]):
+            next_move = 'X'
+        else:
+            next_move = 'O'
         input_coordinate = input("Enter the coordinates: ").split()
         if input_coordinate[0].isalpha():
             print("You should enter numbers!")
@@ -135,17 +131,20 @@ def play_game(user_input, resume = True):
                 new_input = []
                 for i in range(len(user_input)):
                     if i == formatted_coordinates:
-                        new_input.append('X')
+                        new_input.append(next_move)
                     else:
                         new_input.append(user_input[i])
                 user_input = ''.join(new_input)
                 display_grid(user_input)
-                play_game(user_input, False)
+                if game_state(user_input) is not None:
+                    print(game_state(user_input))
+                else:
+                    play_game(user_input, True, next_move)
 
-def game_start():
-    user_input = input("Enter cells: ")
+
+def game_start(user_input="         "):
     display_grid(user_input)
-    play_game(user_input)
+    play_game(user_input, True)
 
 
 game_start()
