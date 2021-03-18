@@ -6,15 +6,16 @@ Objectives
     Print out the Invalid
 """
 
+def get_quote(url):
+    r = requests.get(url)
+    if r.status_code >= 200 and r.status_code < 400:
+        try:
+            return r.json()['content']
+        except:
+            return "Invalid quote resource"
+    else:
+        return "Invalid quote resource"
 
 print("Input the URL:")
 input_url = input()
-
-r = requests.get(input_url)
-if r.status_code >= 200 and r.status_code < 400:
-    try:
-        print(r.json()['content'])
-    except:
-        print("Invalid quote resource")
-else:
-    print("Invalid quote resource")
+print(get_quote(input_url))
