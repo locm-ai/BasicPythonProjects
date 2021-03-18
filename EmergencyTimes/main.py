@@ -1,6 +1,5 @@
-from lxml import html
 import requests
-
+from bs4 import BeautifulSoup
 
 """
 I've recently dealt with the issue of extremely long wait times while waiting for care from the emergency room
@@ -15,5 +14,6 @@ Objectives
 
 url = "https://www.upstate.edu/healthcare/wait.php"
 r = requests.get(url)
-page_data = html.fromstring(r.content)
-hospitals = page_data.xpath('//div[@title="buyer-name"]/text()')
+soup = BeautifulSoup(r.content, 'html.parser')
+time = soup.find_all('div', {'class': 'emergency-times'})
+print(time)
